@@ -10,7 +10,7 @@ class Dicegame {
     static int noOfFields = 11;
 
     public static void main(String[] args) {
-        System.out.print("\nWELCOME TO THE NEW GAME \n\nType 'Start' to begin\n");
+        System.out.print("\nWELCOME TO THE NEW GAME \n\nType 'Start' to begin or 'quit' to quit\n");
         Dicegame.scanner = new java.util.Scanner(System.in);
         String input = Dicegame.scanner.nextLine();
         if (input.equals("RunTest1")) {
