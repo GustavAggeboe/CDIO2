@@ -10,11 +10,20 @@ class Dicegame {
     static int noOfFields = 11;
 
     public static void main(String[] args) {
+        System.out.print("\nWELCOME TO THE NEW GAME \n\nType 'Start' to begin\n");
         Dicegame.scanner = new java.util.Scanner(System.in);
-        game = new Game();
-        game.initializeGame();
-
-        runTest();
+        String input = Dicegame.scanner.nextLine();
+        if (input.equals("RunTest1")) {
+            new walletIllegalArgumentException_Test1().walletTest();
+        }
+        else if (input.equals("RunTest2")) {
+            new walletCalculatorTrue_Test2().walletTest();
+        }
+        else if (input.equals("Start") || input.equals("start")) {
+            game = new Game();
+            game.initializeGame();
+            runTest();
+        }
     }
 
     static boolean runTheTest = false;
