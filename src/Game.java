@@ -18,7 +18,8 @@ class Game {
         players = new Player[Dicegame.noOfPlayers];
         for (int i = 0; i < Dicegame.noOfPlayers; i++) {
             print("Please enter the name for Player " + (i + 1) + ".");
-            players[i] = new Player(Dicegame.scanner.nextLine());
+                players[i] = new Player(Dicegame.scanner.nextLine());
+
         }
     }
 
@@ -92,8 +93,9 @@ class Game {
                 diceValuesString += "\n";
             diceValuesString += "Dice " + (i + 1) + ": " + currentPlayer.getDieValue(i);
         }
-        diceValuesString += "\n";
         print(diceValuesString);
+        print("Dice Sum: " + currentPlayer.getSumOfDice() + "\n");
+
     }
 
     private void playerStats() {
