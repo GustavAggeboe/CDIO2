@@ -64,6 +64,7 @@ class Game {
                         break;
                     case negative:
                         currentPlayer.wallet().substractMoney(field.getValue());
+                        print("You lost " + field.getValue() + " money =(\n");
                         break;
                 }
                 // Hvis vi fandt feltet, som spilleren landede på, så retunerer vi ud af
@@ -93,9 +94,8 @@ class Game {
                 diceValuesString += "\n";
             diceValuesString += "Dice " + (i + 1) + ": " + currentPlayer.getDieValue(i);
         }
-        print(diceValuesString);
+        print("\n" + diceValuesString);
         print("Dice Sum: " + currentPlayer.getSumOfDice() + "\n");
-
     }
 
     private void playerStats() {
@@ -123,6 +123,7 @@ class Game {
     private boolean playerGetsBonusTurn() {
         for (Field field : fields) {
             if (field.getSpace() == currentPlayer.getSumOfDice()) {
+                print("You got an extra turn =)");
                 return field.grantsBonusTurn();
             }
         }
