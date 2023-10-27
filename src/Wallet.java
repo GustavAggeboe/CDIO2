@@ -2,7 +2,7 @@ public class Wallet {
     private int money;
 
     public Wallet() {
-        money = Dicegame.startMoney;
+        money = Dicegame.START_MONEY;
     }
 
     public int getMoney() {
@@ -16,7 +16,7 @@ public class Wallet {
                             + moneyToAdd);
         } else {
             money += moneyToAdd;
-            money = Math.min(money, Dicegame.moneyToWin); // Begrænser til maxMoneyToWin
+            money = Math.min(money, Dicegame.MONEY_TO_WIN); // Begrænser til maxMoneyToWin
         }
     }
 

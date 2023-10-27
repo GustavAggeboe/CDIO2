@@ -1,71 +1,99 @@
 // Håndterer selve spillets logik
 
 public class Game {
+    public static Game Singleton;
     java.util.Scanner scanner;
     static boolean runTheTest = false;
 
-    Field[] fields;
+    public static Field[] fields;
 
     Player[] players;
     private int playerTurn;
     Player currentPlayer;
+    int currentPlayerSetupCounter = 1;
 
-    public Game() {
-        scanner = new java.util.Scanner(System.in);
-        String input = scanner.nextLine();
+    public enum GameStates {
+        Welcome,
+        PlayerSetup,
+        PlayerBeginTurn,
+        PlayerRolling,
+        PlayerShowResult
+    }
+    GameStates gameState;
 
-        if (input.equals("RunTest1")) {
-            new WalletIllegalArgumentExceptionTest1().walletTest();
-        } else if (input.equals("RunTest2")) {
-            new WalletCalculatorTrueTest2().walletTest();
-        } else if (input.equals("Start") || input.equals("start")) {
-            if (runTheTest)
-                runTest();
-            else {
-                initializeGame();
-            }
-        }
+    Game() {
+        if (Singleton == null)
+            Singleton = this;
+        else
+            return;
+
+        welcomeMessage();
     }
 
-    public void initializeGame() {
-        // runTest();
+    private void setGameState(GameStates newGameState) {
+        gameState = newGameState;
+        GamePanel.Singleton.UpdateUI();
+    }
+
+    private void welcomeMessage() {
+        setGameState(GameStates.Welcome);
+    }
+
+    public void setupGame() {
+        currentPlayerSetupCounter = 0;
         initializePlayers();
         initializeFields();
 
-        startGame();
+        setGameState(GameStates.PlayerSetup);
     }
 
     private void initializePlayers() {
-        players = new Player[Dicegame.noOfPlayers];
-        for (int i = 0; i < Dicegame.noOfPlayers; i++) {
-            print("Please enter the name for Player " + (i + 1) + ".");
-            players[i] = new Player(scanner.nextLine());
-
-        }
+        players = new Player[Dicegame.NO_OF_PLAYERS];
     }
-
     private void initializeFields() {
         fields = Field.initializeFields();
     }
 
-    private void startGame() {
-        takePlayerTurn();
+    public void createPlayer(String playerName) {
+        players[currentPlayerSetupCounter] = new Player(playerName);
+
+        if (currentPlayerSetupCounter >= Dicegame.NO_OF_PLAYERS - 1) {
+            startGame();
+        } else {
+            currentPlayerSetupCounter++;
+        }
     }
 
-    private void takePlayerTurn() { // Alt hvad der sker på en tur, sker her fra.
+    private void startGame() {
+        setupTurn();
+    }
+
+    private void setupTurn() {
+        // Der bliver holdt styr på, hvis tur det er, i variablen currentPlayer.
         currentPlayer = players[playerTurn];
-        // Der bliver holdt styr på, hvis tur det er, i variablen playerTurn.
-        print("\n" + currentPlayer.getPlayerName() + "'s turn. Type 'roll' to throw the dice.");
 
-        waitForRollInput(); // Her venter koden til spilleren har givet inputet 'roll'.
+        setGameState(GameStates.PlayerBeginTurn);
+    }
 
-        // Der er nu blevet rullet med terninger.
+    public void playerRoll() {
+        setGameState(GameStates.PlayerRolling);
 
+        /*try {
+            wait(Dicegame.ROLL_WAIT_TIME_MILLIS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }*/
+
+        currentPlayer.rollDice();
+        playerResult();
+    }
+
+    private void playerResult() {
         showPlayerRoll(); // Vi viser hvad spilleren har slået i konsollen.
         fieldLogic(); // Vi kører logikken for, hvad der sker på det felt spilleren har landet på.
         playerStats(); // Vi viser spillerens nuværende penge.
 
-        nextPlayerTurn(); // Gå videre til næste persons tur.
+        setGameState(GameStates.PlayerShowResult);
     }
 
     private void fieldLogic() {
@@ -73,8 +101,7 @@ public class Game {
             if (field.getSpace() == currentPlayer.getSumOfDice()) { // Hvis dette er sandt, så har spilleren landet på
                                                                     // dette felt.
                                                                     // Print hvad feltet har som beskrivelse
-                print("You landed on " + field.getName());
-                print(field.getLandingDescription());
+
                 // Påfør ændring i spillers penge, alt efter hvilken effekt feltet har, angivet
                 // i initialiseringen af feltet i Field.java.
                 switch (field.getFieldEffect()) {
@@ -98,19 +125,9 @@ public class Game {
 
     // #region Funktioner i turn-logikken - Nok lidt ligegyldigt at kigge særligt
     // meget mere på.
-    private void waitForRollInput() {
-        String input = scanner.nextLine();
-        if (input.toLowerCase().equals("roll"))
-            currentPlayer.rollDice();
-        else {
-            print("Could not find a command for input: '" + input + "'. Type 'roll' to throw the dice.");
-            waitForRollInput();
-        }
-    }
-
     private void showPlayerRoll() {
         String diceValuesString = new String();
-        for (int i = 0; i < Dicegame.noOfDice; i++) {
+        for (int i = 0; i < Dicegame.NO_OF_DICE; i++) {
             if (i > 0)
                 diceValuesString += "\n";
             diceValuesString += "Dice " + (i + 1) + ": " + currentPlayer.getDieValue(i);
@@ -128,26 +145,21 @@ public class Game {
             playerWon();
     }
 
-    private void nextPlayerTurn() {
-        // Forbliver på samme playerTurn, hvis spiller har bonustur, eller plus med 1,
-        // så det bliver den næstes tur.
-        if (playerGetsBonusTurn())
-            print("You got an extra turn =)");
-        else
-            incrementPlayerTurn();
-        // Næste tur starter
-        takePlayerTurn();
+    public void nextPlayerTurn() {
+        if (playerGetsBonusTurn()) {
+
+        } else {
+            playerTurn++;
+            // Hvis playerTurn er større end antallet af spillere, så gå tilbage til
+            // spilleren på plads 0.
+            if (playerTurn >= Dicegame.NO_OF_PLAYERS)
+                playerTurn = 0;
+        }
+
+        setupTurn();
     }
 
-    private void incrementPlayerTurn() {
-        playerTurn++;
-        // Hvis playerTurn er større end antallet af spillere, så gå tilbage til
-        // spilleren på plads 0.
-        if (playerTurn >= Dicegame.noOfPlayers)
-            playerTurn = 0;
-    }
-
-    private boolean playerGetsBonusTurn() {
+    public boolean playerGetsBonusTurn() {
         for (Field field : fields) {
             if (field.getSpace() == currentPlayer.getSumOfDice()) {
                 return field.grantsBonusTurn();
@@ -172,7 +184,7 @@ public class Game {
 
         String input = scanner.nextLine();
         if (input.toLowerCase().equals("play"))
-            initializeGame();
+            setupGame();
         else if (input.toLowerCase().equals("quit"))
             scanner.close();
         else {

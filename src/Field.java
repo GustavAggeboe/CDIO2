@@ -13,6 +13,8 @@ public class Field {
 
     private FieldEffects fieldEffect = FieldEffects.neutral;
 
+    public static final int scale = 5;
+
     public Field(String name, int space, FieldEffects fieldEffect, int value, boolean grantsBonusTurn,
             String landingDescription) {
         this.name = name;
@@ -49,7 +51,7 @@ public class Field {
 
     public static Field[] initializeFields() {
         // Laver et nyt array af fields
-        Field[] newFields = new Field[Dicegame.noOfFields];
+        Field[] newFields = new Field[Dicegame.NO_OF_FIELDS];
 
         // Kalder addFieldToList() og definerer fields'ne.
         addFieldToList(newFields, "Tower", 2, FieldEffects.positive, 250, false,

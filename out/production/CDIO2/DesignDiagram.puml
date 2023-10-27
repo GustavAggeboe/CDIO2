@@ -1,0 +1,87 @@
+@startuml DesignDiagram
+class Dice {
+  -faceValue: int
+  +rollDie(): void
+  +getValue(): int
+}
+
+class Field {
+  -name: String
+  -space: int
+  -value: int
+  -grantsBonusTurn: boolean
+  -landingDescription: String
+  -fieldEffect: FieldEffects
+  +Field(name: String, space: int, fieldEffect: FieldEffects, value: int, grantsBonusTurn: boolean, landingDescription: String)
+  +getName(): String
+  +getSpace(): int
+  +getFieldEffect(): FieldEffects
+  +getLandingDescription(): String
+  +getValue(): int
+  +grantsBonusTurn(): boolean
+  +initializeFields(): Field[]
+  -addFieldToList(fieldsArray: Field[], name: String, space: int, fieldEffect: FieldEffects, value: int, grantsBonusTurn: boolean, landingDescription: String): void
+}
+
+enum FieldEffects {
+  neutral
+  positive
+  negative
+}
+
+class Game {
+  -scanner: java.util.Scanner
+  -runTheTest: boolean
+  -fields: Field[]
+  -players: Player[]
+  -playerTurn: int
+  -currentPlayer: Player
+  +Game()
+  +initializeGame(): void
+  -initializePlayers(): void
+  -initializeFields(): void
+  -startGame(): void
+  -takePlayerTurn(): void
+  -fieldLogic(): void
+  -waitForRollInput(): void
+  -showPlayerRoll(): void
+  -playerStats(): void
+  -nextPlayerTurn(): void
+  -incrementPlayerTurn(): void
+  -playerGetsBonusTurn(): boolean
+  -playerWon(): void
+  -EndMessage(): void
+  +runTest(): void
+  +print(string: String): void
+}
+
+class Player {
+  -name: String
+  -dice: Dice[]
+  -wallet: Wallet
+  +Player(name: String)
+  -initializePlayerDice(): void
+  +rollDice(): void
+  +checkForMoneyToWin(): boolean
+  +getDieValue(die: int): int
+  +getSumOfDice(): int
+  +getPlayerName(): String
+  +getStats(): String
+  +wallet(): Wallet
+}
+
+class Wallet {
+  -money: int
+  +Wallet()
+  +getMoney(): int
+  +addMoney(moneyToAdd: int): void
+  +substractMoney(moneyToSubtract: int): void
+}
+
+Game --> Field
+Game --> Player
+Player --> Dice
+Player --> Wallet
+Field --> FieldEffects
+
+@enduml

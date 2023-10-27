@@ -8,23 +8,24 @@ public class Player {
         this.wallet = new Wallet();
 
         initializePlayerDice();
+        Game.print("Created player: " + this.name);
     }
 
     private void initializePlayerDice() {
-        dice = new Dice[Dicegame.noOfDice];
-        for (int i = 0; i < Dicegame.noOfDice; i++) {
+        dice = new Dice[Dicegame.NO_OF_DICE];
+        for (int i = 0; i < Dicegame.NO_OF_DICE; i++) {
             dice[i] = new Dice();
         }
     }
 
     public void rollDice() {
-        for (int i = 0; i < Dicegame.noOfDice; i++) {
+        for (int i = 0; i < Dicegame.NO_OF_DICE; i++) {
             dice[i].rollDie();
         }
     }
 
     public boolean checkForMoneyToWin() {
-        return wallet.getMoney() == Dicegame.moneyToWin;
+        return wallet.getMoney() == Dicegame.MONEY_TO_WIN;
     }
 
     public int getDieValue(int die) {
@@ -33,7 +34,7 @@ public class Player {
 
     public int getSumOfDice() {
         int sum = 0;
-        for (int i = 0; i < Dicegame.noOfDice; i++) {
+        for (int i = 0; i < Dicegame.NO_OF_DICE; i++) {
             sum += dice[i].getValue();
         }
         return sum;
