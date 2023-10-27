@@ -41,9 +41,3 @@ How to run the tests
 
 Type "RunTest1" in terminal after starting the program, to run test1.
 Type "RunTest2" for running after starting the program, to run test2.
-
-
-To deploy this project run
-
-
-
