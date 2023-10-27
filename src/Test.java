@@ -79,10 +79,10 @@ class walletIllegalArgumentException_Test1 {
         System.out.print("\nYou lost 500 \n");
         System.out.print("New Wallet value = " + testWallet.getMoney() + "\n");
         if (testWallet.getMoney() == 0) {
-            System.out.print("Test of negative value in wallet succes");
+            System.out.print("walletIllegalArgumentException_Test1 succes");
 
         } else {
-            System.out.print("Test of negative value in wallet failed");
+            System.out.print("walletIllegalArgumentException_Test1 failed");
         }
     }
 }
@@ -110,14 +110,15 @@ class walletCalculatorTrue_Test2 {
                 System.out.print("New Wallet value = " + testWallet.getMoney() + "\n");
                 if (testWallet.getMoney() == 1135) {
                     System.out.print("\n3. Test succes\n\n");
+                    System.out.print("\nwalletCalculatorTrue_Test2 succes\n\n");
                 } else {
-                    System.out.print("Test Failed \n");
+                    System.out.print("nwalletCalculatorTrue_Test2 Failed \n");
                 }
             } else {
-                System.out.print("Test Failed \n");
+                System.out.print("nwalletCalculatorTrue_Test2 Failed \n");
             }
         } else {
-            System.out.print("Test Failed \n");
+            System.out.print("nwalletCalculatorTrue_Test2 Failed \n");
         }
     }
 }
