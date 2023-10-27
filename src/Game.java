@@ -18,7 +18,7 @@ class Game {
         players = new Player[Dicegame.noOfPlayers];
         for (int i = 0; i < Dicegame.noOfPlayers; i++) {
             print("Please enter the name for Player " + (i + 1) + ".");
-                players[i] = new Player(Dicegame.scanner.nextLine());
+            players[i] = new Player(Dicegame.scanner.nextLine());
 
         }
     }
@@ -110,20 +110,25 @@ class Game {
     private void nextPlayerTurn() {
         // Forbliver på samme playerTurn, hvis spiller har bonustur, eller plus med 1,
         // så det bliver den næstes tur.
-        if (!playerGetsBonusTurn())
-            playerTurn++;
+        if (playerGetsBonusTurn())
+            print("You got an extra turn =)");
+        else
+            incrementPlayerTurn();
+        // Næste tur starter
+        takePlayerTurn();
+    }
+
+    private void incrementPlayerTurn() {
+        playerTurn++;
         // Hvis playerTurn er større end antallet af spillere, så gå tilbage til
         // spilleren på plads 0.
         if (playerTurn >= Dicegame.noOfPlayers)
             playerTurn = 0;
-        // Næste tur starter
-        takePlayerTurn();
     }
 
     private boolean playerGetsBonusTurn() {
         for (Field field : fields) {
             if (field.getSpace() == currentPlayer.getSumOfDice()) {
-                print("You got an extra turn =)");
                 return field.grantsBonusTurn();
             }
         }
