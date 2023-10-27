@@ -1,28 +1,49 @@
-<h1>Welcome to our Dice Game</h1>
 
-<h2>Download and installation</h2>
+# Welcome to our Dice Game
+We are a group of 5 student from the Technical University of Denmark - DTU.
 
-<h3>Clone repository</h3>
-* Copy the URL for this repository(repo) <br/>
-* Open your bash terminal and navigate to the directory (folder) you want the repo in. <br/>
-* Run the following command in the terminal to clone the repo to the folder you navigated to: <br/> <h3>
+In this repository, we have developed a simple game of dice for 2 players.
 
-`git clone repo-URL`<h3/>
-<b> Remember to replace <i>repo-URL</i> with the URL you copied before. </b> <br/>
-* Press enter. <br/>
-The repo should now be cloned to your local system. <br/>
- <br/>
- 
-<h3>Compile</h3>
-<li>Navigate to the “CDIO2” folder in the console. <br/>
-<li>Run the following command to compile the files for the game: <br/>
-<i>“javac -d "classes" src\*.java”</i> <br/>
-That's it! The game should now be compiled and ready to run. <br/>
- <br/>
-<h3>Run the game</h3> <br/>
-Navigate to the “CDIO2” folder in the console. <br/>
-<li> “java -cp "classes" src\Dicegame.java”. <br/>
- <br/>
-<h2>How to run the tests</h2> <br/>
-Type "RunTest1" in terminal after starting the program, to run test1. <br/>
-Type "RunTest2" for running after starting the program, to run test2. <br/>
+## Download and installation
+
+### Clone repository
+
+* Copy the URL for this repository
+* Open your bash terminal and navigate to the directory (folder) you want the repository in.
+* Run the following command in the terminal to clone the repository:
+
+```bash
+  git clone repo-URL
+```
+
+Remember to replace repo-URL with the URL you copied before.
+* Press enter.
+The repo should now be cloned to your local system.
+
+### Compile
+
+* Navigate to the “CDIO2” folder in the console.
+* Run the following command to compile the files for the game:
+```bash
+   javac -d "classes" src\*.java
+```
+
+That's it! The game should now be compiled and ready to run.
+
+## Run the game
+* Navigate to the “CDIO2” folder in the console.
+* Run the following command to run the game in the terminal:
+```bash
+   java -cp "classes" src\Dicegame.java
+```
+
+How to run the tests
+
+Type "RunTest1" in terminal after starting the program, to run test1.
+Type "RunTest2" for running after starting the program, to run test2.
+
+
+To deploy this project run
+
+
+
