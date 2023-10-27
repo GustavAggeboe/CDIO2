@@ -1,4 +1,4 @@
-class Player {
+public class Player {
     private String name;
     private Dice[] dice;
     private Wallet wallet;

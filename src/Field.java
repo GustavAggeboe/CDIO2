@@ -1,4 +1,4 @@
-class Field {
+public class Field {
     private String name = "Udefineret feltnavn";
     private int space = 0;
     private int value = 0;

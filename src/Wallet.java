@@ -1,4 +1,4 @@
-class Wallet {
+public class Wallet {
     private int money;
 
     public Wallet() {

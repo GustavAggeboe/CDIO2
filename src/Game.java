@@ -1,16 +1,37 @@
 // Håndterer selve spillets logik
 
-class Game {
-    Player[] players;
-    Field[] fields;
-    private int playerTurn;
+public class Game {
+    java.util.Scanner scanner;
+    static boolean runTheTest = false;
 
+    Field[] fields;
+
+    Player[] players;
+    private int playerTurn;
     Player currentPlayer;
+
+    public Game() {
+        scanner = new java.util.Scanner(System.in);
+        String input = scanner.nextLine();
+
+        if (input.equals("RunTest1")) {
+            new WalletIllegalArgumentExceptionTest1().walletTest();
+        } else if (input.equals("RunTest2")) {
+            new WalletCalculatorTrueTest2().walletTest();
+        } else if (input.equals("Start") || input.equals("start")) {
+            if (runTheTest)
+                runTest();
+            else {
+                initializeGame();
+            }
+        }
+    }
 
     public void initializeGame() {
         // runTest();
         initializePlayers();
         initializeFields();
+
         startGame();
     }
 
@@ -18,7 +39,7 @@ class Game {
         players = new Player[Dicegame.noOfPlayers];
         for (int i = 0; i < Dicegame.noOfPlayers; i++) {
             print("Please enter the name for Player " + (i + 1) + ".");
-            players[i] = new Player(Dicegame.scanner.nextLine());
+            players[i] = new Player(scanner.nextLine());
 
         }
     }
@@ -78,7 +99,7 @@ class Game {
     // #region Funktioner i turn-logikken - Nok lidt ligegyldigt at kigge særligt
     // meget mere på.
     private void waitForRollInput() {
-        String input = Dicegame.scanner.nextLine();
+        String input = scanner.nextLine();
         if (input.toLowerCase().equals("roll"))
             currentPlayer.rollDice();
         else {
@@ -149,11 +170,11 @@ class Game {
 
         print("\nType 'play' to play again. Type 'quit' to quit the game.");
 
-        String input = Dicegame.scanner.nextLine();
+        String input = scanner.nextLine();
         if (input.toLowerCase().equals("play"))
             initializeGame();
         else if (input.toLowerCase().equals("quit"))
-            Dicegame.scanner.close();
+            scanner.close();
         else {
             print("Could not find a command for input: '" + input + "'.");
             EndMessage();

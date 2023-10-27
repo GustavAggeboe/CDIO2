@@ -1,7 +1,6 @@
 // Er starten på programmet, da den indeholder main(). Her definerer vi spillets attributter, som er af simpel type.
 // Vi definerer altså ikke felterne her, men i Field.java.
-class Dicegame {
-    static java.util.Scanner scanner;
+public class Dicegame {
     static Game game;
     static int noOfPlayers = 2;
     static int noOfDice = 2;
@@ -11,27 +10,9 @@ class Dicegame {
 
     public static void main(String[] args) {
         System.out.print("\nWELCOME TO THE NEW GAME \n\nType 'Start' to begin or 'quit' to quit\n");
-        Dicegame.scanner = new java.util.Scanner(System.in);
-        String input = Dicegame.scanner.nextLine();
-        if (input.equals("RunTest1")) {
-            new walletIllegalArgumentException_Test1().walletTest();
-        }
-        else if (input.equals("RunTest2")) {
-            new walletCalculatorTrue_Test2().walletTest();
-        }
-        else if (input.equals("Start") || input.equals("start")) {
-            game = new Game();
-            game.initializeGame();
-            runTest();
-        }
+        game = new Game();
     }
 
-    static boolean runTheTest = false;
-
-    private static void runTest() {
-        if (runTheTest)
-            game.runTest();
-    }
 }
 
 // ----------- Mangler -----------
