@@ -53,25 +53,25 @@ public class Field {
 
         // Kalder addFieldToList() og definerer fields'ne.
         addFieldToList(newFields, "Tower", 2, FieldEffects.positive, 250, false,
-                "Nice! you found a lot of gold, you got 250 money =)"); // Her indtastes beskrivelse for feltet
+                "Nice! you found a lot of gold inside the tower, you got 250 money =)"); // Her indtastes beskrivelse for feltet
         addFieldToList(newFields, "Crater", 3, FieldEffects.negative, 100, false,
-                "You did not find anything, you lost 100 money for expenses");
+                "You did not find anything, you lost 100 money in expenses");
         addFieldToList(newFields, "Palace Gates", 4, FieldEffects.positive, 100, false,
                 "You found a bit of gold, you got 100 money");
         addFieldToList(newFields, "Cold Desert", 5, FieldEffects.negative, 20, false,
-                "There are nothing in the dessert, you lost 20 money expenses");
+                "There are nothing in the dessert, you lost 20 money in expenses");
         addFieldToList(newFields, "Walled City", 6, FieldEffects.positive, 180, false,
-                "You found a nice share of gold, you got 180 money");
+                "You found a nice share of gold in a hidden chest inside the walled city, you got 180 money");
         addFieldToList(newFields, "Monastery", 7, FieldEffects.neutral, 0, false,
                 "Its not your day, but you found enough to get even, you got 0 money");
         addFieldToList(newFields, "Black Cave", 8, FieldEffects.negative, 70, false,
-                "Thats too bad, you found nothing, you lost 70 gold");
+                "You got attacked in the black cave, and got 70 gold stolen from you");
         addFieldToList(newFields, "Huts in the Mountain", 9, FieldEffects.positive, 60, false,
                 "You did not find a lot of gold on top of the mountain but a bit, you got 60 money");
         addFieldToList(newFields, "The Werewall", 10, FieldEffects.negative, 80, true,
                 "Unlucky, you lost 80 gold, but you get an extra turn =)");
         addFieldToList(newFields, "The Pit", 11, FieldEffects.negative, 50, false,
-                "you fell in the Pit, you lost 50 money to get up");
+                "You fell in the Pit, you lost 50 money to get up");
         addFieldToList(newFields, "Goldmine", 12, FieldEffects.positive, 650, false,
                 "\nYou hit the JACKPOT, You are rich!! you got 650 gold\n");
 
