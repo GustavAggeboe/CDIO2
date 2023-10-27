@@ -47,6 +47,7 @@ That's it! The game should now be compiled and ready to run.
 ## How to run the tests
 
 * Run the program as described above in the section 'Run the game'.
+
 Type `RunTest1` in the game, to run test 1.
 
 Type `RunTest2` in the game, to run test 2.
