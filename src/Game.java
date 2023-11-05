@@ -3,8 +3,6 @@
 public class Game {
     public static Game Singleton;
     java.util.Scanner scanner;
-    static boolean runTheTest = false;
-
     public static Field[] fields;
 
     Player[] players;
@@ -19,7 +17,7 @@ public class Game {
         PlayerRolling,
         PlayerShowResult
     }
-    GameStates gameState;
+    GameStates gameState = GameStates.Welcome;
 
     Game() {
         if (Singleton == null)
@@ -115,7 +113,7 @@ public class Game {
                         print("You lost " + field.getValue() + " money =(\n");
                         break;
                 }
-                // Hvis vi fandt feltet, som spilleren landede på, så retunerer vi ud af
+                // Hvis vi fandt feltet, som spilleren landede på, så returnerer vi ud af
                 // fieldLogic(). Ellers bliver fejlbeskeden nedenfor vist.
                 return;
             }
@@ -126,7 +124,7 @@ public class Game {
     // #region Funktioner i turn-logikken - Nok lidt ligegyldigt at kigge særligt
     // meget mere på.
     private void showPlayerRoll() {
-        String diceValuesString = new String();
+        String diceValuesString = "";
         for (int i = 0; i < Dicegame.NO_OF_DICE; i++) {
             if (i > 0)
                 diceValuesString += "\n";
@@ -146,9 +144,7 @@ public class Game {
     }
 
     public void nextPlayerTurn() {
-        if (playerGetsBonusTurn()) {
-
-        } else {
+        if (!playerGetsBonusTurn()) {
             playerTurn++;
             // Hvis playerTurn er større end antallet af spillere, så gå tilbage til
             // spilleren på plads 0.
@@ -183,9 +179,9 @@ public class Game {
         print("\nType 'play' to play again. Type 'quit' to quit the game.");
 
         String input = scanner.nextLine();
-        if (input.toLowerCase().equals("play"))
+        if (input.equalsIgnoreCase("play"))
             setupGame();
-        else if (input.toLowerCase().equals("quit"))
+        else if (input.equalsIgnoreCase("quit"))
             scanner.close();
         else {
             print("Could not find a command for input: '" + input + "'.");

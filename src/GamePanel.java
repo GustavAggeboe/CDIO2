@@ -1,3 +1,7 @@
+// Håndterer UI-elementer
+
+import UIModules.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,222 +14,121 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 720, UNIT_SIZE = 50, GAME_UNITS = SCREEN_WIDTH*SCREEN_HEIGHT/UNIT_SIZE;
     static final Color backgroundColor = Color.darkGray;
 
-    // UI Moduler
-    final JLabel titleText = new JLabel(),
-            instructionText = new JLabel(),
-            fieldDescriptionText = new JLabel(),
-            playerTurnNameText = new JLabel();
-    final JTextField playerNameField = new JTextField();
-    final JButton button_submitPlayer = new JButton("Submit player"),
-            button_roll = new JButton("Roll dice"),
-            button_start = new JButton("Start"),
-            button_nextPlayerTurn = new JButton("Next player");
-    JLabel diceRollAnimationLabel = new JLabel();
-    ImageIcon diceRollAnimation = new ImageIcon();
+    //region UIModules
 
-    enum DiceStates {
-        Hidden,
-        Rolling,
-        Showing
-    }
-    DiceStates diceState = DiceStates.Hidden;
+    // - UIText
+    UIText titleText, instructionText, fieldDescriptionText, playerTurnNameText;
+    // - UIButton
+    UIButton startButton, submitPlayerButton, rollButton, nextPlayerTurnButton;
+    // - UITextField
+    JTextField playerNameTextField;
+    // - UIDiceAnimation
+    JLabel diceAnimation = new UIDiceAnimation("diceroll.gif");
+
+    //endregion
 
     GamePanel() {
-        // Sæt singleton
+        // ** Sæt singleton **
         if (Singleton == null)
             Singleton = this;
         else
             return;
 
-        // Indstillinger
+        // ** Indstillinger **
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(backgroundColor);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        UIUtils.setAL(this);
 
-        // Moduler
-        setupJLabel(titleText);
-        setupJLabel(instructionText);
-        setupJLabel(fieldDescriptionText);
-        setupJLabel(playerTurnNameText);
-        setupJTextField(playerNameField);
-        setupJButton(button_submitPlayer, "submitPlayer");
-        setupJButton(button_roll, "roll");
-        setupJButton(button_start, "start");
-        setupJButton(button_nextPlayerTurn, "nextPlayerTurn");
-        setupDiceAnimation();
-    }
+        // ** Moduler ** - Der SKAL først initialiseres hernede, efter UIUtils.setAL(this); er blevet kaldt.
+        titleText = new UIText();
+        instructionText = new UIText();
+        fieldDescriptionText = new UIText();
+        playerTurnNameText = new UIText();
+        startButton = new UIButton("Start", "start");
+        submitPlayerButton = new UIButton("Submit player", "submitPlayer");
+        rollButton = new UIButton("Roll dice", "roll");
+        nextPlayerTurnButton = new UIButton("Next player", "nextPlayerTurn");
+        playerNameTextField = new UIInputField();
+        diceAnimation = new UIDiceAnimation("diceroll.gif");
 
-    private void setupJLabel(JLabel jLabel) {
-        jLabel.setAlignmentX(0.5f);
-        jLabel.setAlignmentY(0f);
-        jLabel.setForeground(Color.lightGray);
-        jLabel.setFont(new Font("Verdana", Font.PLAIN,32));
-        jLabel.setPreferredSize(new Dimension(200, 50));
-        this.add(jLabel);
-        jLabel.setVisible(true);
-    }
-    private void setupJTextField(JTextField textField) {
-        textField.setBackground(Color.lightGray);
-        textField.setPreferredSize(new Dimension(200, 50));
-        this.add(textField);
-        textField.setVisible(false);
-    }
-    private void setupJButton(JButton jbutton, String actionCommand) {
-        jbutton.setBackground(Color.lightGray);
-        jbutton.setActionCommand(actionCommand);
-        jbutton.setPreferredSize(new Dimension(100, 50));
-        jbutton.addActionListener(this);
-        this.add(jbutton);
-        jbutton.setVisible(false);
-    }
-
-    private void setupDiceAnimation() {
-        diceRollAnimation = new ImageIcon(this.getClass().getResource("diceroll.gif"));
-        diceRollAnimationLabel.setIcon(diceRollAnimation);
-        this.add(diceRollAnimationLabel);
-        diceRollAnimationLabel.setVisible(false);
-    }
-
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        draw(g);
-    }
-
-    public void draw(Graphics g) {
-        // Text
-        // Fields
-        if (Game.fields != null) {
-            g.setColor(Color.lightGray);
-            int fieldSize = Field.scale * UNIT_SIZE;
-            for (int i = 0; i < Game.fields.length; i++) {
-                g.fillRoundRect(i * fieldSize, SCREEN_HEIGHT/2,fieldSize,fieldSize, fieldSize / 2, fieldSize / 2);
-            }
+        for (JComponent jComponent : UIUtils.getJComponents()) {
+            this.add(jComponent);
         }
-        // Players
-    }
-
-    private void setTitleText(String text) {
-        titleText.setText(text);
-    }
-
-    private void setInstructionText(String text) {
-        instructionText.setText(text);
-    }
-
-    private void setFieldDescriptionText(String text) {
-        fieldDescriptionText.setText(text);
-    }
-
-    private void setPlayerTurnNameText(String text) {
-        playerTurnNameText.setText(text);
-    }
-
-    private void setTextFieldVisible(String textField, boolean isVisible) {
-        switch (textField) {
-            case "playerNameField":
-                playerNameField.setVisible(isVisible);
-                break;
-        }
-    }
-
-    private void setButtonVisible(String button, boolean isVisible) {
-        switch (button) {
-            case "submitPlayer":
-                button_submitPlayer.setVisible(isVisible);
-                break;
-            case "roll":
-                button_roll.setVisible(isVisible);
-                break;
-            case "start":
-                button_start.setVisible(isVisible);
-            case "nextPlayerTurn":
-                button_nextPlayerTurn.setVisible(isVisible);
-                break;
-        }
-    }
-
-    private void setDiceAnimationVisible(boolean isVisible) {
-        diceRollAnimationLabel.setVisible(isVisible);
     }
 
     public void UpdateUI () {
-        switch (Game.Singleton.gameState) {
+        clearUI(); // Start med at rydde UI'en
+        switch (Game.Singleton.gameState) { // Derefter vis kun det der skal vises
             case Welcome:
-                Game.print("yo");
-                setTitleText("Welcome to Dice Game!");
-                setInstructionText("Press start to begin.");
-                setButtonVisible("start", true);
-                setButtonVisible("nextPlayerTurn", false);
+                titleText.setText("Welcome to Dice Game!");
+                instructionText.setText("Press start to begin.");
+
+                startButton.setVisible(true);
                 break;
+
             case PlayerSetup:
-                setTitleText("Player setup");
-                setButtonVisible("start", false);
-                setButtonVisible("submitPlayer", true);
-                setTextFieldVisible("playerNameField", true);
-                setInstructionText("Please enter a name for player " + (Game.Singleton.currentPlayerSetupCounter + 1) + ", and press 'Submit player'.");
+                titleText.setText("Player setup");
+                instructionText.setText("Please enter a name for player " + (Game.Singleton.currentPlayerSetupCounter + 1) + ", and press 'Submit player'.");
+
+                playerNameTextField.setVisible(true);
+                submitPlayerButton.setVisible(true);
                 break;
+
             case PlayerBeginTurn:
-                setButtonVisible("nextPlayerTurn", false);
-                setTitleText("");
-                setPlayerTurnNameText(Game.Singleton.currentPlayer.getPlayerName() + "'s turn.");
-                setButtonVisible("submitPlayer", false);
-                setTextFieldVisible("playerNameField", false);
-                setInstructionText("Press the Roll button to roll the dice.");
-                setButtonVisible("roll", true);
-                setFieldDescriptionText("");
+                playerTurnNameText.setText(Game.Singleton.currentPlayer.getPlayerName() + "'s turn.");
+                instructionText.setText("Press the Roll button to roll the dice.");
+
+                rollButton.setVisible(true);
                 break;
+
             case PlayerRolling:
-                setButtonVisible("roll", false);
-                setInstructionText("");
-                setTitleText("Rolling...");
-                diceState = DiceStates.Rolling;
+                titleText.setText("Rolling...");
+
+                diceAnimation.setVisible(true);
                 break;
+
             case PlayerShowResult:
-                setInstructionText("");
-                setTitleText("");
                 for (Field field : Game.fields) {
                     if (field.getSpace() == Game.Singleton.currentPlayer.getSumOfDice()) {
-                        setFieldDescriptionText("You landed on " + field.getName() + ". " + field.getLandingDescription());
+                        fieldDescriptionText.setText("You landed on " + field.getName() + ". " + field.getLandingDescription());
                     }
                 }
-                diceState = DiceStates.Showing;
-
+                // HUSK AT VIS HVAD TERNINGEN VISER
                 if (Game.Singleton.playerGetsBonusTurn())
-                    setButtonVisible("roll", true);
+                    rollButton.setVisible(true);
                 else
-                    setButtonVisible("nextPlayerTurn", true);
-
-                break;
-        }
-        switch (diceState) {
-            case Hidden:
-                setDiceAnimationVisible(false);
-                break;
-            case Rolling:
-                setDiceAnimationVisible(true);
-                break;
-            case Showing:
-                setDiceAnimationVisible(false);
+                    nextPlayerTurnButton.setVisible(true);
                 break;
         }
     }
 
-    public void submitPlayer () {
-        Game.Singleton.createPlayer(playerNameField.getText());
-        Singleton.playerNameField.setText("");
-        UpdateUI();
+    private void clearUI() { // Rydder UI'en, inden der bliver valgt, hvad der skal være på skærmen
+        for (JLabel module : UIText.list) {
+            module.setText("");
+        }
+        for (JButton module : UIButton.list) {
+            module.setVisible(false);
+        }
+        for (JTextField module : UIInputField.list) {
+            module.setText("");
+            module.setVisible(false);
+        }
+        for (JLabel module : UIDiceAnimation.list) {
+            module.setVisible(false);
+        }
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) { // Bliver kaldt når brugeren trykker på en knap
         switch (e.getActionCommand()) {
             case "submitPlayer":
-                submitPlayer();
+                Game.Singleton.createPlayer(playerNameTextField.getText());
+                UpdateUI();
                 break;
             case "roll":
                 Game.Singleton.playerRoll();
-                setButtonVisible("roll", false);
                 UpdateUI();
                 break;
             case "start":
@@ -239,13 +142,28 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    public class MyKeyAdapter extends KeyAdapter {
+    public void paintComponent(Graphics g) { // Indbygget funktion til at tegne UI'en på skærmen
+        super.paintComponent(g);
+        draw(g);
+    }
+    public void draw(Graphics g) { // Ligesom ovenfor... bare... anderledes...
+        /*if (Game.fields != null) {
+            g.setColor(Color.lightGray);
+            int fieldSize = Field.scale * UNIT_SIZE;
+            for (int i = 0; i < Game.fields.length; i++) {
+                g.fillRoundRect(i * fieldSize, SCREEN_HEIGHT/2,fieldSize,fieldSize, fieldSize / 2, fieldSize / 2);
+            }
+        }*/
+    }
+
+    public class MyKeyAdapter extends KeyAdapter { // Bliver kaldt når der bliver trykket på tastaturet
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            if (Game.Singleton.gameState == Game.GameStates.PlayerSetup) {
+            if (Game.Singleton.gameState == Game.GameStates.PlayerSetup) { // Virker vidst ikke endnu
                 if (key == KeyEvent.VK_ENTER) {
-                    GamePanel.Singleton.submitPlayer();
+                    Game.Singleton.createPlayer(playerNameTextField.getText());
+                    UpdateUI();
                 }
             }
         }
